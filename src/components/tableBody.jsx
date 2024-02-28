@@ -28,7 +28,6 @@ function tableBody({ array, page, fetchHeader }) {
         setData(array)
         return () => setIdDataArray(null)
     }, [array])
-    console.log(data)
     return (
         <>
             {idDataArray !== null ?
