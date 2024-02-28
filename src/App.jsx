@@ -60,7 +60,6 @@ function App() {
   }
   const data = {
     method: "POST",
-    mode: "CORS",
     headers: fetchHeader,
     body: JSON.stringify({
       action: "get_ids"
@@ -68,7 +67,6 @@ function App() {
   }
   const dataPrice = {
     method: "POST",
-    mode: "CORS",
     headers: fetchHeader,
     body: JSON.stringify({
       action: "filter",
@@ -77,20 +75,18 @@ function App() {
   }
   const dataProduct = {
     method: "POST",
-    mode: "CORS",
     headers: fetchHeader,
     body: JSON.stringify({
       action: "filter",
-      params: { "product": inputValue}
+      params: { "product": inputValue }
     }),
   }
   const dataBrand = {
     method: "POST",
-    mode: "CORS",
     headers: fetchHeader,
     body: JSON.stringify({
       action: "filter",
-      params: { "brand": inputValue}
+      params: { "brand": inputValue }
     }),
   }
 

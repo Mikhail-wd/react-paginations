@@ -8,7 +8,6 @@ function tableBody({ array, page, fetchHeader }) {
             await fetch("http://api.valantis.store:40000/",
                 {
                     method: "POST",
-                    mode: "CORS",
                     headers: fetchHeader,
                     body: JSON.stringify({
                         action: "get_items",
