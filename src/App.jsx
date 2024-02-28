@@ -14,7 +14,7 @@ function App() {
 
   const fetchHeader = {
     "Accept": "application/json",
-    "Content-Type": "application/json, charset=UTF-8",
+    "Content-Type": "application/json",
     "X-Auth": md5("Valantis_" + (localDate.getFullYear() + "" + (((localDate.getMonth() + 1) + "").length < 2 ? "0" + (localDate.getMonth() + 1) : (localDate.getMonth() + 1)) + "" + localDate.getDate())),
   }
 
@@ -38,7 +38,7 @@ function App() {
   }
 
   const fetchingData = async (value) => {
-    await fetch("https://api.valantis.store:40000/", value)
+    await fetch("https://api.valantis.store:41000/", value)
       .then(resData => {
         if (resData.ok !== true) {
           throw Error(resData.status + " " + resData.statusText)

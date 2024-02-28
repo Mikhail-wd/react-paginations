@@ -5,7 +5,7 @@ function tableBody({ array, page, fetchHeader }) {
     const [idDataArray, setIdDataArray] = useState(null)
     useEffect(() => {
         async function fetchingData() {
-            await fetch("https://api.valantis.store:40000/",
+            await fetch("https://api.valantis.store:41000/",
                 {
                     method: "POST",
                     headers: fetchHeader,
