@@ -39,7 +39,7 @@ function App() {
   }
 
   const fetchingData = async (value) => {
-    await fetch("http://api.valantis.store:40000/", value)
+    await fetch("https://api.valantis.store:40000/", value)
       .then(resData => {
         if (resData.ok !== true) {
           throw Error(resData.status + " " + resData.statusText)
