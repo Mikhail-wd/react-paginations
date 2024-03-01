@@ -7,7 +7,7 @@ function App() {
   const [calculatedPages, setCalculatedPages] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedValue, setSelectedValue] = useState("price")
-  const [inputValue, setInputValue] = useState(26600)
+  const [inputValue, setInputValue] = useState("")
 
   const localDate = new Date(Date.now());
 
@@ -27,11 +27,11 @@ function App() {
 
   function submitRequest(e) {
     e.preventDefault()
-    if (selectedValue == "price") {
+    if (selectedValue == "price" && inputValue != "") {
       fetchingData(dataPrice)
-    } if (selectedValue == "product") {
+    } if (selectedValue == "product" && inputValue != "") {
       fetchingData(dataProduct);
-    } if (selectedValue == "brand") {
+    } if (selectedValue == "brand" && inputValue != "") {
       fetchingData(dataBrand)
     }
   }
@@ -78,7 +78,7 @@ function App() {
     headers: fetchHeader,
     body: JSON.stringify({
       action: "filter",
-      params: { "product": inputValue }
+      params: { "product" : inputValue}
     }),
   }
   const dataBrand = {
