@@ -55,7 +55,7 @@ function App() {
       })
       .catch(error => {
         console.error(error.message)
-        setReFetching(true)
+         fetchingData(data)
       })
   }
   const data = {
