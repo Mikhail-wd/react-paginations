@@ -3,10 +3,9 @@ import TableBody from './components/tableBody';
 import md5 from "md5";
 
 function App() {
-  const [idArray, setIDarray] = useState(null)
+  const [idArray, setIDarray] = useState(false)
   const [calculatedPages, setCalculatedPages] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
-  const [reFetching, setReFetching] = useState(false)
   const [selectedValue, setSelectedValue] = useState("price")
   const [inputValue, setInputValue] = useState(26600)
 
@@ -15,7 +14,7 @@ function App() {
   const fetchHeader = {
     "Accept": "application/json",
     "Content-Type": "application/json",
-    "X-Auth": md5("Valantis_" + (localDate.getFullYear() + "" + (((localDate.getMonth() + 1) + "").length < 2 ? "0" + (localDate.getMonth() + 1) : (localDate.getMonth() + 1)) + "" + localDate.getDate())),
+    "X-Auth": md5("Valantis_" + (localDate.getFullYear() + "" + (((localDate.getMonth() + 1) + "").length < 2 ? "0" + (localDate.getMonth() + 1) : (localDate.getMonth() + 1)) + "" + ((localDate.getDate()) <= 9 ? "0" + (localDate.getDate()) : (localDate.getDate())))),
   }
 
   function pageController(value) {
@@ -37,27 +36,28 @@ function App() {
     }
   }
 
+
   const fetchingData = async (value) => {
     await fetch("https://api.valantis.store:41000/", value)
       .then(resData => {
         if (resData.ok !== true) {
-          throw Error(resData.status + " " + resData.statusText)
+          throw Error(resData.status + " " + ", requesting again...")
         } else {
           return resData.json()
         }
       }
       )
       .then(respon => {
-        setReFetching(false)
         setCurrentPage(1)
-        setIDarray(respon.result)
+        setIDarray(productFilter(respon.result))
         setCalculatedPages(Math.ceil(respon.result.length / 50))
       })
       .catch(error => {
         console.error(error.message)
-         fetchingData(data)
+        fetchingData(value)
       })
   }
+
   const data = {
     method: "POST",
     headers: fetchHeader,
@@ -93,6 +93,19 @@ function App() {
   useEffect(() => {
     fetchingData(data)
   }, [])
+
+  function productFilter(value) {
+    let filteredArray = []
+    for (let x = 0; x < value.length; x++) {
+      if (filteredArray.includes(value[x])) {
+        console.error("id doubles :" + value[x])
+      } else {
+        filteredArray.push(value[x])
+      }
+    }
+    return filteredArray
+  }
+
   return (
     <>
       <form action="submit" className="form" >
@@ -114,7 +127,7 @@ function App() {
             <th>Бренд</th>
           </tr>
         </thead>
-        {idArray !== null ? <TableBody array={idArray} page={currentPage} fetchHeader={fetchHeader} /> : null}
+        {idArray != false ? <TableBody array={idArray} page={currentPage} fetchHeader={fetchHeader} /> : null}
       </table>
       <hr />
       <div className="controller">

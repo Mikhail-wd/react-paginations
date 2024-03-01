@@ -1,52 +1,49 @@
 import { useState, useEffect } from "react"
 
-function tableBody({ array, page, fetchHeader }) {
-    const [data, setData] = useState([])
-    const [idDataArray, setIdDataArray] = useState(null)
+function tableBody(props = { array, page, fetchHeader }) {
+    const [idDataArray, setIdDataArray] = useState([])
+
+    function fetchingData(value) {
+        fetch("https://api.valantis.store:41000/",
+            {
+                method: "POST",
+                headers: props.fetchHeader,
+                body: JSON.stringify({
+                    action: "get_items",
+                    params: { "ids": value }
+                }),
+            })
+            .then(resData =>
+                resData.json()
+            )
+            .then(respon =>
+                setIdDataArray(respon.result)
+            ).catch(
+                console.log(" in table...")
+            )
+    }
     useEffect(() => {
-        async function fetchingData() {
-            await fetch("https://api.valantis.store:41000/",
-                {
-                    method: "POST",
-                    headers: fetchHeader,
-                    body: JSON.stringify({
-                        action: "get_items",
-                        params: { "ids": array }
-                    }),
-                })
-                .then(resData =>
-                    resData.json()
-                )
-                .then(respon => {
-                    setIdDataArray(respon.result)
-                }
-                ).catch(
-                    console.error("Some error")
-                )
-        }
-        fetchingData()
-        setData(array)
-        return () => setIdDataArray(null)
-    }, [array])
+        fetchingData(props.array)
+    }, [])
     return (
         <>
-            {idDataArray !== null ?
+            {idDataArray.length != 0 ?
                 <tbody>{
-                    data.slice(page * 50 - 50, 50 * page).map(index =>
+                    props.array.slice(props.page * 50 - 50, 50 * props.page).map(index =>
                         <tr key={Math.random()}>
                             <td>
-                                {data.findIndex(value => value === index) + 1}
+                                {props.array.findIndex(value => value === index) + 1}
                             </td>
                             <td>{index}</td>
-                            <td>{idDataArray.find(element => element.id === index).product}</td>
-                            <td>{idDataArray.find(element => element.id === index).price}</td>
-                            <td>{idDataArray.find(element => element.id === index).brand}</td>
+                            <td>{idDataArray.find(element => element.id == index).product}</td>
+                            <td>{idDataArray.find(element => element.id == index).price}</td>
+                            <td>{idDataArray.find(element => element.id == index).brand}</td>
                         </tr>
                     )}
                 </tbody>
-                : data.length == 0 ? <tbody><tr><td colSpan={5} style={{ textAlign: "center" }}>Ошибка запроса.</td></tr></tbody>
-                : <tbody><tr><td colSpan={5} style={{ textAlign: "center" }}>Загрузка...</td></tr></tbody>
-        }
+                : idDataArray.length == 0 ? <tbody><tr><td colSpan={5} style={{ textAlign: "center" }}>Загрузка...</td></tr></tbody>
+                    : <tbody><tr><td colSpan={5} style={{ textAlign: "center" }}>Ошибка запроса.</td></tr></tbody>
+            }
         </>
     )
 }
